@@ -56,9 +56,13 @@ $('#commandLine').keyup(function(event) {
 });
 
 function debug() {
+  console.log('------');
   console.log(lastCommand);
+  console.log('------');
   console.log(commands);
+  console.log('------');
   console.log(pc());
+
 }
 
 function addToCommandList(input) {
