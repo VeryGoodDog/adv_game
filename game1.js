@@ -77,10 +77,11 @@ function getCleanInput() {
       return temp;
     }
   }
+  return 'invalid command';
 }
 
 function addToOutput(input) {
-  $('#output').prepend(input + '\n');
+  $('#output').prepend('\n'+input + '\n');
   return;
 }
 
@@ -101,14 +102,6 @@ function pc() {
 
 }
 
-// function getCommands() {
-//   $.getJSON("commands.json", function(data) {
-//     console.log(data);
-//   });
-// }
-
-
-
 function commandContr(s) {
     if (pc() && (commands[s].type === 'quest' || commands[s].type === 'response')) {
       questContr(s);
@@ -119,10 +112,10 @@ function commandContr(s) {
 function questContr(s) {
   if (commands[s].require === 'met') {
     console.log('active');
-    addToOutput(commands[s].text+'\n');
+    addToOutput(commands[s].text);
     return;
   } else if (commands[s].completed === true) {
-    addToOutput('u already did'+'\n');
+    addToOutput('u already did');
     return;
   } else if (commands[pc()].op1 === s) {
     addToOutput(commands[pc()].out1);
@@ -135,10 +128,10 @@ function questContr(s) {
     }
     return;
   } else if (commands[pc()].op2 === s) {
-    addToOutput(commands[pc()].out2+'\n');
+    addToOutput(commands[pc()].out2);
     return;
   } else if (commands[commands[s].require].completed === false) {
-    addToOutput('you need to complete ' + commands[s].require+'\n');
+    addToOutput('you need to complete ' + commands[s].require);
     return;
   } else {
     addToOutput('error');
