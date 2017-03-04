@@ -42,8 +42,7 @@ var commands =
     "out2":"you lived",
     "require":"fight",
     "after":"none",
-    "completed":false,
-    "script":"death"
+    "completed":false
   },
   "yes":{
     "type":"response"
@@ -98,11 +97,10 @@ function getCleanInput() {
       return temp;
     }
   }
-  return 'invalid command';
 }
 
 function addToOutput(input) {
-  $('#output').prepend('\n'+input + '\n');
+  $('#output').prepend(input + '\n');
   return;
 }
 
@@ -140,11 +138,10 @@ function commandContr(s) {
 
 function questContr(s) {
   if (commands[s].require === 'met') {
-<<<<<<< HEAD
     addToOutput(commands[s].text+'\n'+commands[s].op1+' '+commands[s].op2);
     return;
   } else if (commands[s].completed === true) {
-    addToOutput('u already did');
+    addToOutput('u already did'+'\n');
     return;
   } else if (commands[pc()].op1 === s) {
     addToOutput(commands[pc()].out1);
@@ -157,10 +154,10 @@ function questContr(s) {
     }
     return;
   } else if (commands[pc()].op2 === s) {
-    addToOutput(commands[pc()].out2);
+    addToOutput(commands[pc()].out2+'\n');
     return;
   } else if (commands[commands[s].require].completed === false) {
-    addToOutput('you need to complete ' + commands[s].require);
+    addToOutput('you need to complete ' + commands[s].require+'\n');
     return;
   } else {
     addToOutput('error');
