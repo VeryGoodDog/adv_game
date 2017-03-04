@@ -68,7 +68,7 @@ $('#commandLine').keyup(function(event) {
     if (lastCommand.recent != 'invalid command') {
       addToOutput(lastCommand.recent);
       addToCommandList(lastCommand.recent);
-      quesContr(lastCommand.recent);
+      questContr(lastCommand.recent);
     } else {
       return;
     }
@@ -174,7 +174,6 @@ function op2Contr(s) {
     break;
     default:
     addToOutput('error');
-
   }
 }
 
@@ -208,7 +207,6 @@ function advop1() {
   addToOutput(commands['adv'].out1);
   commands['adv'].completed = true;
   addToOutput('now you can complete: '+commands['adv'].after)
-  commands[commands['adv'].after].require = 'met';
   return;
 }
 
