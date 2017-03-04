@@ -1,18 +1,21 @@
 var lastCommand = {'count':0, 'list':['']};
-
+var player = {"status":"alive"}
 var commands =
 {
   "vldCmds":[
     "start",
     "fight",
+    "adv",
     "yes",
-    "no"
+    "no",
+    "far",
+    "close"
   ],
   "start":{
     "type":"quest",
     "op1":"yes",
     "op2":"no",
-    "text":"wanna game?\nyes or no",
+    "text":"wanna game?",
     "out1":"good",
     "out2":"bad",
     "require":"met",
@@ -23,17 +26,35 @@ var commands =
     "type":"quest",
     "op1":"yes",
     "op2":"no",
-    "text":"wanna fight?\nyes or no",
+    "text":"wanna fight?",
     "out1":"you win",
     "out2":"you lose",
     "require":"start",
-    "after":"none",
+    "after":"adv",
     "completed":false
+  },
+  "adv":{
+    "type":"quest",
+    "op1":"far",
+    "op2":"close",
+    "text":"wanna adventure?",
+    "out1":"you died...",
+    "out2":"you lived",
+    "require":"fight",
+    "after":"none",
+    "completed":false,
+    "script":"death"
   },
   "yes":{
     "type":"response"
   },
   "no":{
+    "type":"response"
+  },
+  "far":{
+    "type":"response"
+  },
+  "close":{
     "type":"response"
   }
 };
@@ -118,8 +139,7 @@ function commandContr(s) {
 
 function questContr(s) {
   if (commands[s].require === 'met') {
-    console.log('active');
-    addToOutput(commands[s].text+'\n');
+    addToOutput(commands[s].text+'\n'+commands[s].op1+' '+commands[s].op2);
     return;
   } else if (commands[s].completed === true) {
     addToOutput('u already did'+'\n');
