@@ -191,11 +191,16 @@ function genop2(s) {
 }
 
 function fightop1() {
-  addToOutput(commands['fight'].out1);
-  commands['fight'].completed = true;
-  addToOutput('now you can complete: '+commands['fight'].after)
-  commands[commands['fight'].after].require = 'met';
-  return;
+  if (Math.random() >= 0.5) {
+    addToOutput(commands['fight'].out1);
+    commands['fight'].completed = true;
+    addToOutput('now you can complete: '+commands['fight'].after)
+    commands[commands['fight'].after].require = 'met';
+    return;
+  } else {
+    addToOutput(commands['fight'].out2);
+    return;
+  }
 }
 
 function fightop2() {
