@@ -75,6 +75,10 @@ $('#commandLine').keyup(function(event) {
   }
 });
 
+function randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function debug() {
   console.log('------');
   console.log(lastCommand);
@@ -124,7 +128,6 @@ function pc() {
 
 function questContr(s) {
   if (pc() && (commands[s].type === 'quest' || commands[s].type === 'response')) {
-    console.log(commands[s].completed);
     if (commands[s].completed === true) {
       addToOutput('you already did')
       return;
@@ -191,7 +194,7 @@ function genop2(s) {
 }
 
 function fightop1() {
-  if (Math.random() >= 0.5) {
+  if (randomNumber(0,10) >= 5) {
     addToOutput(commands['fight'].out1);
     commands['fight'].completed = true;
     addToOutput('now you can complete: '+commands['fight'].after)
