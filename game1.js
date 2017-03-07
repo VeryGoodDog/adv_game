@@ -1,75 +1,16 @@
-var lastCommand = {'count':0, 'list':['']};
-var player = {"status":"alive"}
-var commands =
-{
-  "vldCmds":[
-    "start",
-    "fight",
-    "adv",
-    "yes",
-    "no",
-    "far",
-    "close"
-  ],
-  "start":{
-    "type":"quest",
-    "op1":"yes",
-    "op2":"no",
-    "text":"wanna game?",
-    "out1":"good",
-    "out2":"bad",
-    "require":"met",
-    "after":"fight",
-    "completed":false
-  },
-  "fight":{
-    "type":"quest",
-    "op1":"yes",
-    "op2":"no",
-    "text":"wanna fight?",
-    "out1":"you win",
-    "out2":"you lose",
-    "require":"start",
-    "after":"adv",
-    "completed":false
-  },
-  "adv":{
-    "type":"quest",
-    "op1":"far",
-    "op2":"close",
-    "text":"wanna adventure?",
-    "out1":"you died...",
-    "out2":"you lived",
-    "require":"fight",
-    "after":"none",
-    "completed":false
-  },
-  "yes":{
-    "type":"response"
-  },
-  "no":{
-    "type":"response"
-  },
-  "far":{
-    "type":"response"
-  },
-  "close":{
-    "type":"response"
-  }
-};
-
-addToOutput('');
+addToOutput(messages.general.starter);
 
 $('#commandLine').keyup(function(event) {
   if (event.key === 'Enter' && lastCommand.recent !== '') {
     lastCommand.recent = getCleanInput();
     console.log(lastCommand.recent);
     clearInput();
-    if (lastCommand.recent != 'invalid command') {
+    if (lastCommand.recent != messages.general.invalidCommand) {
       addToOutput(lastCommand.recent);
       addToCommandList(lastCommand.recent);
-      questContr(lastCommand.recent);
+      commandContr(lastCommand.recent);
     } else {
+      addToOutput(messages.general.invalidCommand);
       return;
     }
   }
@@ -77,6 +18,10 @@ $('#commandLine').keyup(function(event) {
 
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function maxI(string) {
+  return [string].length - 2;
 }
 
 function debug() {
@@ -101,7 +46,11 @@ function getCleanInput() {
       return temp;
     }
   }
-  return 'invalid command';
+  return messages.general.invalidCommand;
+}
+
+function checkType(ic) {
+  return (commands[ic].type === 'quest' || commands[ic].type === 'response' || commands[ic].type === 'gen');
 }
 
 function addToOutput(input) {
@@ -126,31 +75,117 @@ function pc() {
 
 }
 
-function questContr(s) {
-  if (pc() && (commands[s].type === 'quest' || commands[s].type === 'response')) {
-    if (commands[s].completed === true) {
-      addToOutput('you already did')
-      return;
-    } else if (commands[s].require === 'met') {
-      addToOutput(commands[s].text+'\n'+commands[s].op1+' '+commands[s].op2);
-      return;
-    } else if (commands[pc()].op1 === s) {
-      op1Contr(pc());
-    } else if (commands[pc()].op2 === s) {
-      op2Contr(pc());
-    } else if (commands[commands[s].require].completed === false) {
-      addToOutput('you need to complete: ' + commands[s].require);
-      return;
-    } else {
-      addToOutput('error');
+function setAfter(ic) {
+  if (commands[ic].after != 'none') {
+    for (var i = 0; i < commands[ic].after.maxI - 2; i++) {
+      commands[commands[ic].after].require = 'met';
     }
+    return;
   }
 }
 
-function op1Contr(s) {
-  switch (s) {
+function setStatus(d) {
+  if (player.health[0]+d >= player.health[1]) {
+    player.health[0] = player.health[1];
+    return player.health[0];
+  } else if (player.health[0]+d <= 0){
+    player.health[0] = 0;
+    addToOutput(messages.general.death)
+    return player.health[0];
+  } else if (player.health[0]+d < player.health[1] && player.health[0]+d > 0) {
+    player.health[0] += d;
+    return player.health[0];
+  }
+}
+
+function setPlayerCoord(x,y) {
+  advMap[player.coord[0]][player.coord[1]] = 0;
+  advMap[player.coord[y]][player.coord[x]] = 1;
+  player.coord = [y,x];
+  return player.coord;
+}
+
+function movePlayer(dir) {
+  switch (dir) {
+    case 'up':
+
+      break;
+    case 'right':
+
+      break;
+    case 'down':
+
+      break;
+    case 'left':
+
+      break;
+    default:
+
+  }
+}
+
+function commandContr(ic) {
+  if (commands['help'].active === true) {
+    addToOutput(commands[ic].description)
+  } else if (pc() && checkType(ic) && !(player.health[0] === 0)) {
+    switch (commands[ic].type) {
+      case 'response':
+        responseContr(ic);
+        break;
+      case 'quest':
+        questContr(ic);
+        break;
+      case 'gen':
+        genContr(ic);
+        break;
+      default:
+        addToOutput(messages.general.error);
+    }
+  } else if (player.health[0] === 0) {
+    addToOutput(messages.general.dead)
+  }
+}
+
+function questContr(ic) {
+  if (commands[ic].completed === true) {
+    addToOutput(messages.general.questAlreadyCompleted + ic)
+    return;
+  } else if (commands[ic].require === 'met') {
+    addToOutput(messages[ic].text+'\n'+commands[ic].op1+' '+commands[ic].op2);
+    return;
+  } else if (commands[commands[ic].require].completed === false) {
+    addToOutput(messages.general.questIncomplete + commands[ic].require);
+    return;
+  } else {
+    addToOutput(messages.general.error);
+  }
+}
+
+function responseContr(ic) {
+  if (commands[pc()].op1 === ic) {
+    op1Contr(pc());
+  } else if (commands[pc()].op2 === ic) {
+    op2Contr(pc());
+  }
+}
+
+function genContr(ic) {
+  switch (ic) {
+    case 'heal':
+      heal();
+      break;
+    case 'help':
+      help();
+      break;
+    default:
+      addToOutput(messages.general.error);
+  }
+}
+
+function op1Contr(ic) {
+  switch (ic) {
     case 'start':
-      genop1(s);
+      startop1(ic);
     break;
     case 'fight':
       fightop1();
@@ -159,15 +194,15 @@ function op1Contr(s) {
       advop1();
     break;
     default:
-    addToOutput('error');
+    addToOutput(messages.general.error);
 
   }
 }
 
-function op2Contr(s) {
-  switch (s) {
+function op2Contr(ic) {
+  switch (ic) {
     case 'start':
-      genop2(s);
+      startop2(ic);
     break;
     case 'fight':
       fightop2();
@@ -176,49 +211,87 @@ function op2Contr(s) {
       advop2();
     break;
     default:
-    addToOutput('error');
+    addToOutput(messages.general.error);
   }
 }
 
-function genop1(s) {
-  addToOutput(commands[s].out1);
-  commands[s].completed = true;
-  addToOutput('now you can complete: '+commands[s].after)
-  commands[commands[s].after].require = 'met';
+function genop1(ic) {
+  addToOutput(commands[ic].out1);
+  commands[ic].completed = true;
+  addToOutput(messages.general.questCompleted+ commands[ic].after)
+  setAfter(ic);
+  setStatus(0);
   return;
 }
 
-function genop2(s) {
-  addToOutput(commands[s].out2);
+function genop2(ic) {
+  addToOutput(commands[ic].out2);
+  setStatus(0);
+  return;
+}
+
+function startop1() {
+  addToOutput(messages['start'].out1);
+  commands['start'].completed = true;
+  addToOutput(messages.general.questCompleted+ commands['start'].after)
+  setAfter('start');
+  setStatus(0);
+  return;
+}
+
+function startop2() {
+  addToOutput(messages['start'].out2);
+  setStatus(0);
   return;
 }
 
 function fightop1() {
-  if (randomNumber(0,10) >= 5) {
-    addToOutput(commands['fight'].out1);
-    commands['fight'].completed = true;
-    addToOutput('now you can complete: '+commands['fight'].after)
-    commands[commands['fight'].after].require = 'met';
-    return;
+  if (randomNumber(0,10) >= 2) {
+    addToOutput(messages['fight'].out1);
+    commands['fight'].fightCount++;
+    if (commands['fight'].fightCount >= 5) {
+      addToOutput(messages.fight.fightEnd);
+      addToOutput(messages.general.questCompleted + commands['fight'].after);
+      setAfter('fight');
+      addToOutput(messages.general.health+setStatus(40));
+      return;
+    } else {
+      addToOutput(messages.fight.fightCount+commands['fight'].fightCount);
+      addToOutput(messages.general.health+setStatus(-1));
+      return;
+    }
   } else {
-    addToOutput(commands['fight'].out2);
+    addToOutput(messages['fight'].out2);
+    addToOutput(messages.general.health+setStatus(-2));
     return;
   }
 }
 
 function fightop2() {
-  addToOutput(commands['fight'].out2);
+  addToOutput(messages['fight'].out2);
   return;
 }
 
 function advop1() {
-  addToOutput(commands['adv'].out1);
-  commands['adv'].completed = true;
-  addToOutput('now you can complete: '+commands['adv'].after)
+  addToOutput(messages['adv'].out1);
+  addToOutput(messages.general.questCompleted+commands['adv'].after);
+  setAfter('adv');
   return;
 }
 
 function advop2() {
-  addToOutput(commands['adv'].out2);
+  addToOutput(messages['adv'].out2);
+  setStatus(-20);
   return;
+}
+
+function help() {
+  for (var i = 0; i < commands.vldCmds.length; i++) {
+    addToOutput(commands.vldCmds[i]);
+  }
+  commands['help'].active = true
+}
+
+function heal() {
+  addToOutput(messages.general.health+setStatus(2));
 }
