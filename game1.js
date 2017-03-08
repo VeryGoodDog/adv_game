@@ -77,7 +77,7 @@ function pc() {
 
 function setAfter(ic) {
   if (commands[ic].after != 'none') {
-    for (var i = 0; i < commands[ic].after.maxI - 2; i++) {
+    for (var i = 0; i < commands[ic].after.maxI; i++) {
       commands[commands[ic].after].require = 'met';
     }
     return;
@@ -98,35 +98,54 @@ function setStatus(d) {
   }
 }
 
-function setPlayerCoord(x,y) {
-  advMap[player.coord[0]][player.coord[1]] = 0;
-  advMap[player.coord[y]][player.coord[x]] = 1;
-  player.coord = [y,x];
-  return player.coord;
+function getPlayerCoords() {
+  return player.coords;
 }
 
-function movePlayer(dir) {
+function setPlayerCoords(x,y) {
+  player.coords = [x,y];
+  return player.coords;
+}
+
+function movePlayerUp(d) {
+  return setPlayerCoords(player.coords[0]+d,player.coords[1]+0);
+}
+
+function movePlayerRight(d) {
+  return setPlayerCoords(player.coords[0]+0,player.coords[1]+d);
+}
+
+function movePlayerDown(d) {
+  return setPlayerCoords(player.coords[0]-d,player.coords[1]+0);
+}
+
+function movePlayerLeft(d) {
+  return setPlayerCoords(player.coords[0]+0,player.coords[1]-d);
+}
+
+function movePlayer(dir,a) {
   switch (dir) {
     case 'up':
-
+      movePlayerUp(a);
       break;
     case 'right':
-
+      movePlayerRight(a);
       break;
     case 'down':
-
+      movePlayerDown(a);
       break;
     case 'left':
-
+      movePlayerLeft(a);
       break;
     default:
-
+      addToOutput('141');
   }
 }
 
 function commandContr(ic) {
   if (commands['help'].active === true) {
-    addToOutput(commands[ic].description)
+    addToOutput(commands[ic].description);
+    commands['help'].active = false;
   } else if (pc() && checkType(ic) && !(player.health[0] === 0)) {
     switch (commands[ic].type) {
       case 'response':
@@ -139,7 +158,7 @@ function commandContr(ic) {
         genContr(ic);
         break;
       default:
-        addToOutput(messages.general.error);
+        addToOutput('161');
     }
   } else if (player.health[0] === 0) {
     addToOutput(messages.general.dead)
@@ -157,15 +176,19 @@ function questContr(ic) {
     addToOutput(messages.general.questIncomplete + commands[ic].require);
     return;
   } else {
-    addToOutput(messages.general.error);
+    addToOutput('179');
   }
 }
 
 function responseContr(ic) {
-  if (commands[pc()].op1 === ic) {
-    op1Contr(pc());
-  } else if (commands[pc()].op2 === ic) {
-    op2Contr(pc());
+  if (commands.adv.active === true) {
+    movePlayer(ic,player.speed);
+  } else {
+    if (commands[pc()].op1 === ic) {
+      op1Contr(pc());
+    } else if (commands[pc()].op2 === ic) {
+      op2Contr(pc());
+    }
   }
 }
 
@@ -178,7 +201,7 @@ function genContr(ic) {
       help();
       break;
     default:
-      addToOutput(messages.general.error);
+      addToOutput('204');
   }
 }
 
@@ -194,7 +217,7 @@ function op1Contr(ic) {
       advop1();
     break;
     default:
-    addToOutput(messages.general.error);
+    addToOutput('220');
 
   }
 }
@@ -211,7 +234,7 @@ function op2Contr(ic) {
       advop2();
     break;
     default:
-    addToOutput(messages.general.error);
+    addToOutput('237');
   }
 }
 
@@ -273,9 +296,7 @@ function fightop2() {
 }
 
 function advop1() {
-  addToOutput(messages['adv'].out1);
-  addToOutput(messages.general.questCompleted+commands['adv'].after);
-  setAfter('adv');
+  commands['adv'].active = true;
   return;
 }
 

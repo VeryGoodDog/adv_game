@@ -1,5 +1,5 @@
 var lastCommand = {'count':0, 'list':['']};
-var player = {"health":[10,10],"coord":[1,1]}
+var player = {"health":[10,10],"coords":[1,1],"speed":1}
 var messages = {
   "general":{
     "invalidCommand":"invalid command",
@@ -11,7 +11,6 @@ var messages = {
     "health":"your health is now ",
     "death":"you died",
     "dead":"you are dead",
-
   },
   "start":{
     "text":"wanna start?",
@@ -28,7 +27,7 @@ var messages = {
   "adv":{
     "text":"wanna adventure?",
     "out1":"you lived",
-    "out2":"you died..."
+    "out2":"you didnt escape"
   }
 }
 var commands =
@@ -42,7 +41,11 @@ var commands =
     "yes",
     "no",
     "far",
-    "close"
+    "close",
+    "up",
+    "right",
+    "down",
+    "left"
   ],
   "start":{
     "type":"quest",
@@ -65,11 +68,12 @@ var commands =
   },
   "adv":{
     "type":"quest",
-    "op1":"close",
-    "op2":"far",
+    "op1":"far",
+    "op2":"close",
     "require":"start",
     "after":["none"],
     "completed":false,
+    "active":false,
     "description":"adventure in to wild lands"
   },
   "help":{
@@ -96,11 +100,29 @@ var commands =
   "close":{
     "type":"response",
     "description":"adventure command"
+  },
+  "up":{
+    "type":"response",
+    "description":"adventure command"
+  },
+  "right":{
+    "type":"response",
+    "description":"adventure command"
+  },
+  "down":{
+    "type":"response",
+    "description":"adventure command"
+  },
+  "left":{
+    "type":"response",
+    "description":"adventure command"
   }
 };
 
-var advMap = {"basic":[
-  [0,0,0],
-  [0,1,0],
-  [0,0,0]
-]}
+var advMap =
+{
+  "basic":
+  {
+    "finish":[0,0]
+  }
+}
