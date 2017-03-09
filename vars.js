@@ -1,5 +1,5 @@
 var lastCommand = {'count':0, 'list':['']};
-var player = {"health":[10,10],"coords":[1,1],"speed":1}
+var player = {"health":[10,10],"coords":[0,0],"speed":1}
 var messages = {
   "general":{
     "invalidCommand":"invalid command",
@@ -21,13 +21,15 @@ var messages = {
     "text":"wanna fight?",
     "out1":"you won",
     "out2":"you lost",
-    "fightCount":"you fought x",
+    "fightCount":"you won x",
     "fightEnd":"you have fought enough to be feared"
   },
   "adv":{
     "text":"wanna adventure?",
-    "out1":"you lived",
-    "out2":"you didnt escape"
+    "out1":"you must run",
+    "out2":"you didnt escape",
+    "advActive":"you cant do that now (use 'up' 'down' 'left' 'right' to move)",
+    "advGoalDistance":"you are this far from the end "
   }
 }
 var commands =
@@ -45,7 +47,8 @@ var commands =
     "up",
     "right",
     "down",
-    "left"
+    "left",
+    "distance"
   ],
   "start":{
     "type":"quest",
@@ -75,6 +78,10 @@ var commands =
     "completed":false,
     "active":false,
     "description":"adventure in to wild lands"
+  },
+  "distance":{
+    "type":"gen",
+    "description":"distance to finish"
   },
   "help":{
     "type":"gen",
@@ -121,8 +128,9 @@ var commands =
 
 var advMap =
 {
-  "basic":
+  "map":
   {
     "finish":[0,0]
-  }
+  },
+  "dist":0
 }
