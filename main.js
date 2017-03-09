@@ -1,19 +1,21 @@
 addToOutput(messages.general.starter);
 
-createFinish(1,1)
+generateFinish(1,1,10,10);
 
 $('#commandLine').keyup(function(event) {
   if (event.key === 'Enter' && lastCommand.recent !== '') {
     lastCommand.recent = getCleanInput();
-    console.log(lastCommand.recent);
-    clearInput();
-    if (lastCommand.recent != messages.general.invalidCommand) {
-      addToOutput(lastCommand.recent);
-      addToCommandList(lastCommand.recent);
-      commandContr(lastCommand.recent);
-    } else {
-      addToOutput(messages.general.invalidCommand);
-      return;
+    for (var i = 0; i < lastCommand.recent.length; i++) {
+      console.log(lastCommand.recent[i]);
+      clearInput();
+      if (lastCommand.recent[i] != messages.general.invalidCommand) {
+        addToOutput(lastCommand.recent[i]);
+        addToCommandList(lastCommand.recent[i]);
+        commandContr(lastCommand.recent[i]);
+      } else {
+        addToOutput(messages.general.invalidCommand);
+        return;
+      }
     }
   }
 });
@@ -71,10 +73,10 @@ function responseContr(ic) {
 function genContr(ic) {
   switch (ic) {
     case 'speed up':
-      speed(2);
+      addToOutput(speed(1));
       break;
     case 'slow down':
-      speed(-2);
+      addToOutput(speed(-1));
       break;
     case 'heal':
       heal();

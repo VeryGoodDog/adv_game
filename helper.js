@@ -22,18 +22,23 @@ function addToCommandList(input) {
 }
 
 function getCleanInput() {
-  var temp = $('#commandLine').val().trim().toLowerCase();
-  for (var i = 0; i < commands.vldCmds.length; i++) {
-    if (commands.vldCmds[i] === temp) {
-      return temp;
+  var out = [];
+  var temp = $('#commandLine').val().trim().toLowerCase().split(" ");
+  for (var i = 0; i < temp.length; i++) {
+    for (var o = 0; o < commands.vldCmds.length; o++) {
+      if (commands.vldCmds[o] === temp[i]) {
+        out[i] = temp[i];
+      }
     }
   }
-  return messages.general.invalidCommand;
+  return out;
 }
 
 function addToOutput(input) {
-  $('#output').prepend('\n'+input + '\n');
-  return;
+  if (input != undefined) {
+    $('#output').prepend('\n'+input + '\n');
+    return;
+  }
 }
 
 function pc() {
@@ -75,6 +80,9 @@ function setStatus(d) {
     return player.health[0];
   } else if (player.health[0]+d < player.health[1] && player.health[0]+d > 0) {
     player.health[0] += d;
+    if (player.health[0] <= player.lowHealth) {
+      addToOutput(messages.general.lowHealth)
+    }
     return player.health[0];
   }
 }
@@ -88,10 +96,18 @@ function createFinish(x,y) {
   return;
 }
 
-function checkLocation(loc) {
-  if (advMap.map[loc] === player.coords) {
-    return true;
+function checkLocation(loc,message) {
+  if (message == undefined) {
+    if (advMap.map[loc][0] == player.coords[0] && advMap.map[loc][1] == player.coords[1]) {
+      return true;
+    } else {
+      return false;
+    }
   } else {
-    return false;
+    if (advMap.map[loc][0] == player.coords[0] && advMap.map[loc][1] == player.coords[1]) {
+      return message;
+    } else {
+      return;
+    }
   }
 }

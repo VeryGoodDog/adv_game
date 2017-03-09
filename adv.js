@@ -28,18 +28,22 @@ function movePlayer(dir,a) {
     case 'up':
       movePlayerUp(a);
       addToOutput(getPlayerCoords());
+      addToOutput(checkLocation(player.destination, messages.general.reachFinish));
       break;
     case 'right':
       movePlayerRight(a);
       addToOutput(getPlayerCoords());
+      addToOutput(checkLocation(player.destination, messages.general.reachFinish));
       break;
     case 'down':
       movePlayerDown(a);
       addToOutput(getPlayerCoords());
+      addToOutput(checkLocation(player.destination, messages.general.reachFinish));
       break;
     case 'left':
       movePlayerLeft(a);
       addToOutput(getPlayerCoords());
+      addToOutput(checkLocation(player.destination, messages.general.reachFinish));
       break;
     default:
       addToOutput(messages.adv.advActive);
@@ -56,5 +60,6 @@ function adventureDistance() {
 }
 
 function speed(d) {
-  player.speed += d
+  player.speed += d;
+  return player.speed;
 }

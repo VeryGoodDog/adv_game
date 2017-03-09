@@ -1,5 +1,5 @@
 var lastCommand = {'count':0, 'list':['']};
-var player = {"health":[10,10],"coords":[0,0],"speed":1}
+var player = {"health":[10,10],"lowHealth":4,"coords":[0,0],"speed":1,"destination":"finish"}
 var messages = {
   "general":{
     "invalidCommand":"invalid command",
@@ -11,6 +11,8 @@ var messages = {
     "health":"your health is now ",
     "death":"you died",
     "dead":"you are dead",
+    "reachFinish":"you have reached the end",
+    "lowHealth":"you must heal"
   },
   "start":{
     "text":"wanna start?",
@@ -22,7 +24,7 @@ var messages = {
     "out1":"you won",
     "out2":"you lost",
     "fightCount":"you won x",
-    "fightEnd":"you have fought enough to be feared"
+    "fightEnd":"you have fought enough to be feared, people dont really like you"
   },
   "adv":{
     "text":"wanna adventure?",
@@ -48,14 +50,16 @@ var commands =
     "right",
     "down",
     "left",
-    "distance"
+    "distance",
+    "speed up",
+    "slow down"
   ],
   "start":{
     "type":"quest",
     "op1":"yes",
     "op2":"no",
     "require":"met",
-    "after":["fight","adv"],
+    "after":["fight"],
     "completed":false,
     "description":"start your quest"
   },
@@ -64,7 +68,7 @@ var commands =
     "op1":"yes",
     "op2":"no",
     "require":"start",
-    "after":["none"],
+    "after":["adv"],
     "completed":false,
     "description":"fight enemies",
     "fightCount":0,
@@ -73,7 +77,7 @@ var commands =
     "type":"quest",
     "op1":"far",
     "op2":"close",
-    "require":"start",
+    "require":"fight",
     "after":["none"],
     "completed":false,
     "active":false,
@@ -82,6 +86,14 @@ var commands =
   "distance":{
     "type":"gen",
     "description":"distance to finish"
+  },
+  "speed up":{
+    "type":"gen",
+    "description":"speed up"
+  },
+  "slow down":{
+    "type":"gen",
+    "description":"slow down"
   },
   "help":{
     "type":"gen",
