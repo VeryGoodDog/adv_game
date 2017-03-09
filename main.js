@@ -3,12 +3,11 @@ addToOutput(messages.general.starter);
 generateFinish(1,1,10,10);
 
 $('#commandLine').keyup(function(event) {
-  if (event.key === 'Enter' && lastCommand.recent !== '') {
+  if (event.key === 'Enter') {
     lastCommand.recent = getCleanInput();
+    clearInput();
     for (var i = 0; i < lastCommand.recent.length; i++) {
-      console.log(lastCommand.recent[i]);
-      clearInput();
-      if (lastCommand.recent[i] != messages.general.invalidCommand) {
+      if (lastCommand.recent[i]) {
         addToOutput(lastCommand.recent[i]);
         addToCommandList(lastCommand.recent[i]);
         commandContr(lastCommand.recent[i]);

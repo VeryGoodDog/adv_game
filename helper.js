@@ -1,3 +1,5 @@
+var temp = [];
+
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -23,7 +25,8 @@ function addToCommandList(input) {
 
 function getCleanInput() {
   var out = [];
-  var temp = $('#commandLine').val().trim().toLowerCase().split(" ");
+  var invalid = false;
+  temp = $('#commandLine').val().trim().toLowerCase().split(" ");
   for (var i = 0; i < temp.length; i++) {
     for (var o = 0; o < commands.vldCmds.length; o++) {
       if (commands.vldCmds[o] === temp[i]) {
