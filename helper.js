@@ -1,4 +1,7 @@
-var temp = [];
+function init() {
+  addToOutput(messages.general.starter);
+  generateFinish(1,1,10,10);
+}
 
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -26,7 +29,7 @@ function addToCommandList(input) {
 function getCleanInput() {
   var out = [];
   var invalid = false;
-  temp = $('#commandLine').val().trim().toLowerCase().split(" ");
+  var temp = $('#commandLine').val().trim().toLowerCase().split(" ");
   for (var i = 0; i < temp.length; i++) {
     for (var o = 0; o < commands.vldCmds.length; o++) {
       if (commands.vldCmds[o] === temp[i]) {
@@ -91,11 +94,11 @@ function setStatus(d) {
 }
 
 function generateFinish(x1,y1,x2,y2) {
-  createFinish(randomNumber(x1,x2),randomNumber(y1,y2));
+  createObject('finish',randomNumber(x1,x2),randomNumber(y1,y2));
 }
 
-function createFinish(x,y) {
-  advMap.map.finish = [x,y];
+function createObject(type,x,y) {
+  advMap.map[type] = [x,y];
   return;
 }
 

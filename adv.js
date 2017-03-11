@@ -50,13 +50,12 @@ function movePlayer(dir,a) {
   }
 }
 
-function setDistance() {
-  advMap.dist = distance(advMap.map.finish[0],player.coords[0],advMap.map.finish[1],player.coords[1])
+function getDistance(target) {
+  return distance(advMap.map[target][0],player.coords[0],advMap.map[target][1],player.coords[1])
 }
 
 function adventureDistance() {
-  setDistance();
-  addToOutput(messages.adv.advGoalDistance+Math.round(advMap.dist));
+  addToOutput(messages.adv.advGoalDistance+Math.round(getDistance('finish')));
 }
 
 function speed(d) {

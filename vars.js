@@ -6,6 +6,7 @@ var messages = {
     "starter":"type start or help to begin",
     "questCompleted":"you can now ",
     "error":"error",
+    "cantDo":"you cant do that now",
     "questIncomplete":"you need to complete: ",
     "questAlreadyCompleted":"you already ",
     "health":"your health is now ",
@@ -40,6 +41,10 @@ var commands =
     "start",
     "fight",
     "adv",
+    "looking for",
+    "distance",
+    "speed up",
+    "slow down",
     "heal",
     "help",
     "yes",
@@ -50,9 +55,8 @@ var commands =
     "right",
     "down",
     "left",
-    "distance",
-    "speed up",
-    "slow down"
+    "a way out",
+    "enemies"
   ],
   "start":{
     "type":"quest",
@@ -78,10 +82,19 @@ var commands =
     "op1":"far",
     "op2":"close",
     "require":"fight",
-    "after":["none"],
+    "after":["looking for"],
     "completed":false,
     "active":false,
     "description":"adventure in to wild lands"
+  },
+  "looking for":{
+    "type":"quest",
+    "op1":"a way out",
+    "op2":"enemies",
+    "require":"adv",
+    "completed":false,
+    "active":false,
+    "description":"what are you looking for?"
   },
   "distance":{
     "type":"gen",
@@ -142,7 +155,7 @@ var advMap =
 {
   "map":
   {
-    "finish":[0,0]
-  },
-  "dist":0
+    "finish":[0,0],
+    "enemies":{"0":[1,1]}
+  }
 }

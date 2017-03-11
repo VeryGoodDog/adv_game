@@ -1,6 +1,4 @@
-addToOutput(messages.general.starter);
-
-generateFinish(1,1,10,10);
+init();
 
 $('#commandLine').keyup(function(event) {
   if (event.key === 'Enter') {
@@ -20,10 +18,7 @@ $('#commandLine').keyup(function(event) {
 });
 
 function commandContr(ic) {
-  if (commands['help'].active === true) {
-    addToOutput(commands[ic].description);
-    commands['help'].active = false;
-  } else if (pc() && checkType(ic) && !(player.health[0] === 0)) {
+  if (pc() && checkType(ic) && !(player.health[0] === 0)) {
     switch (commands[ic].type) {
       case 'response':
         responseContr(ic);
@@ -37,8 +32,6 @@ function commandContr(ic) {
       default:
         addToOutput('main 35');
     }
-  } else if (player.health[0] === 0) {
-    addToOutput(messages.general.dead)
   }
 }
 
@@ -58,13 +51,20 @@ function questContr(ic) {
 }
 
 function responseContr(ic) {
-  if (commands.adv.active === true) {
+  if (commands['adv'].active === true) {
     movePlayer(ic,player.speed);
   } else {
-    if (commands[pc()].op1 === ic) {
-      op1Contr(pc());
-    } else if (commands[pc()].op2 === ic) {
-      op2Contr(pc());
+    if (commands[pc()].require === 'met') {
+      switch (ic) {
+        case commands[pc()].op1:
+          op1Contr(pc());
+          break;
+        case commands[pc()].op2:
+          op2Contr(pc());
+          break;
+      }
+    } else {
+      addToOutput(messages.general.cantDo);
     }
   }
 }
@@ -104,7 +104,6 @@ function op1Contr(ic) {
     break;
     default:
     addToOutput('main 94');
-
   }
 }
 
