@@ -32,6 +32,8 @@ function commandContr(ic) {
       default:
         addToOutput('main 35');
     }
+  } else if (player.health[0] === 0) {
+    addToOutput(messages.general.dead);
   }
 }
 
@@ -62,6 +64,8 @@ function responseContr(ic) {
         case commands[pc()].op2:
           op2Contr(pc());
           break;
+        default:
+        addToOutput('main 66');
       }
     } else {
       addToOutput(messages.general.cantDo);
@@ -71,10 +75,16 @@ function responseContr(ic) {
 
 function genContr(ic) {
   switch (ic) {
-    case 'speed up':
+    case 'entertown':
+      entertown();
+      break;
+    case 'fight':
+      fight();
+      break;
+    case 'speedup':
       addToOutput(speed(1));
       break;
-    case 'slow down':
+    case 'slowdown':
       addToOutput(speed(-1));
       break;
     case 'heal':
@@ -93,14 +103,11 @@ function genContr(ic) {
 
 function op1Contr(ic) {
   switch (ic) {
-    case 'start':
-      startop1(ic);
-    break;
-    case 'fight':
-      fightop1();
-    break;
     case 'adv':
       advop1();
+    break;
+    case 'lookingfor':
+      lookingforop1();
     break;
     default:
     addToOutput('main 94');
@@ -109,14 +116,11 @@ function op1Contr(ic) {
 
 function op2Contr(ic) {
   switch (ic) {
-    case 'start':
-      startop2(ic);
-    break;
-    case 'fight':
-      fightop2();
-    break;
     case 'adv':
       advop2();
+    break;
+    case 'lookingfor':
+      lookingforop2();
     break;
     default:
     addToOutput('main 111');

@@ -117,3 +117,15 @@ function checkLocation(loc,message) {
     }
   }
 }
+
+function checkComp(ic) {
+  if (commands[ic].require === 'met') {
+    return true;
+  } else if (commands[ic].require != ['met']) {
+    addToOutput(messages.general.questIncomplete+commands[ic].require);
+    return false;
+  } else if ((commands[ic].completed === true)) {
+    addToOutput(messages.general.questAlreadyCompleted+ic);
+    return false;
+  }
+}

@@ -3,7 +3,7 @@ var player = {"health":[10,10],"lowHealth":4,"coords":[0,0],"speed":1,"destinati
 var messages = {
   "general":{
     "invalidCommand":"invalid command",
-    "starter":"type start or help to begin",
+    "starter":"enter the town or get help to begin",
     "questCompleted":"you can now ",
     "error":"error",
     "cantDo":"you cant do that now",
@@ -12,13 +12,12 @@ var messages = {
     "health":"your health is now ",
     "death":"you died",
     "dead":"you are dead",
-    "reachFinish":"you have reached the end",
+    "reach":"you have reached ",
     "lowHealth":"you must heal"
   },
-  "start":{
-    "text":"wanna start?",
-    "out1":"sick",
-    "out2":":("
+  "entertown":{
+    "text":"wanna enter the town?",
+    "out1":"there is a warm welcome",
   },
   "fight":{
     "text":"wanna fight?",
@@ -33,18 +32,23 @@ var messages = {
     "out2":"you didnt escape",
     "advActive":"you cant do that now (use 'up' 'down' 'left' 'right' to move)",
     "advGoalDistance":"you are this far from the end "
+  },
+  "lookingfor":{
+    "text":"what are you looking for?",
+    "out1":"you are looking for a way out",
+    "out2":"you are looking for enemies"
   }
 }
 var commands =
 {
   "vldCmds":[
-    "start",
+    "entertown",
     "fight",
     "adv",
-    "looking for",
+    "lookingfor",
     "distance",
-    "speed up",
-    "slow down",
+    "speedup",
+    "slowdown",
     "heal",
     "help",
     "yes",
@@ -55,24 +59,20 @@ var commands =
     "right",
     "down",
     "left",
-    "a way out",
+    "awayout",
     "enemies"
   ],
-  "start":{
-    "type":"quest",
-    "op1":"yes",
-    "op2":"no",
+  "entertown":{
+    "type":"gen",
     "require":"met",
     "after":["fight"],
     "completed":false,
     "description":"start your quest"
   },
   "fight":{
-    "type":"quest",
-    "op1":"yes",
-    "op2":"no",
-    "require":"start",
-    "after":["adv"],
+    "type":"gen",
+    "require":"entertown",
+    "after":["lookingfor"],
     "completed":false,
     "description":"fight enemies",
     "fightCount":0,
@@ -81,30 +81,30 @@ var commands =
     "type":"quest",
     "op1":"far",
     "op2":"close",
-    "require":"fight",
-    "after":["looking for"],
+    "require":"lookingfor",
+    "after":["none"],
     "completed":false,
     "active":false,
     "description":"adventure in to wild lands"
   },
-  "looking for":{
+  "lookingfor":{
     "type":"quest",
-    "op1":"a way out",
+    "op1":"awayout",
     "op2":"enemies",
-    "require":"adv",
+    "require":"fight",
+    "after":["adv"],
     "completed":false,
-    "active":false,
     "description":"what are you looking for?"
   },
   "distance":{
     "type":"gen",
     "description":"distance to finish"
   },
-  "speed up":{
+  "speedup":{
     "type":"gen",
     "description":"speed up"
   },
-  "slow down":{
+  "slowdown":{
     "type":"gen",
     "description":"slow down"
   },
@@ -130,6 +130,14 @@ var commands =
     "description":"adventure command"
   },
   "close":{
+    "type":"response",
+    "description":"adventure command"
+  },
+  "awayout":{
+    "type":"response",
+    "description":"adventure command"
+  },
+  "enemies":{
     "type":"response",
     "description":"adventure command"
   },

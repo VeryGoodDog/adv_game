@@ -13,46 +13,38 @@ function genop2(ic) {
   return;
 }
 
-function startop1() {
-  addToOutput(messages['start'].out1);
-  commands['start'].completed = true;
-  addToOutput(messages.general.questCompleted+commands['start'].after)
-  setAfter('start');
-  setStatus(0);
-  return;
-}
-
-function startop2() {
-  addToOutput(messages['start'].out2);
-  setStatus(0);
-  return;
-}
-
-function fightop1() {
-  if (randomNumber(0,10) >= 2) {
-    addToOutput(messages['fight'].out1);
-    commands['fight'].fightCount++;
-    if (commands['fight'].fightCount >= 5) {
-      addToOutput(messages.fight.fightEnd);
-      addToOutput(messages.general.questCompleted + commands['fight'].after);
-      setAfter('fight');
-      addToOutput(messages.general.health+setStatus(40));
-      return;
-    } else {
-      addToOutput(messages.fight.fightCount+commands['fight'].fightCount);
-      addToOutput(messages.general.health+setStatus(-1));
-      return;
-    }
-  } else {
-    addToOutput(messages['fight'].out2);
-    addToOutput(messages.general.health+setStatus(-2));
+function entertown() {
+  if (checkComp('entertown') === true) {
+    addToOutput(messages['entertown'].out1);
+    commands['entertown'].completed = true;
+    addToOutput(messages.general.questCompleted+commands['entertown'].after)
+    setAfter('entertown');
     return;
   }
 }
 
-function fightop2() {
-  addToOutput(messages['fight'].out2);
-  return;
+function fight() {
+  if (checkComp('fight') === true) {
+    if (randomNumber(0,10) >= 4) {
+      addToOutput(messages['fight'].out1);
+      commands['fight'].fightCount++;
+      if (commands['fight'].fightCount >= 5) {
+        addToOutput(messages.fight.fightEnd);
+        addToOutput(messages.general.questCompleted + commands['fight'].after);
+        setAfter('fight');
+        addToOutput(messages.general.health+setStatus(40));
+        return;
+      } else {
+        addToOutput(messages.fight.fightCount+commands['fight'].fightCount);
+        addToOutput(messages.general.health+setStatus(-1));
+        return;
+      }
+    } else {
+      addToOutput(messages['fight'].out2);
+      addToOutput(messages.general.health+setStatus(-2));
+      return;
+    }
+  }
 }
 
 function advop1() {
@@ -64,6 +56,20 @@ function advop1() {
 function advop2() {
   addToOutput(messages['adv'].out2);
   setStatus(-20);
+  return;
+}
+
+function lookingforop1() {
+  addToOutput(messages.lookingfor.out1);
+  player.destination = 'finish';
+  setAfter('lookingfor');
+  return;
+}
+
+function lookingforop2() {
+  addToOutput(messages.lookingfor.out2);
+  player.destination = 'enemies';
+  setAfter('lookingfor');
   return;
 }
 
